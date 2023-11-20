@@ -1,9 +1,16 @@
 
+import { app } from "./app.js";
 import connectDB from "./db/index.js";
 
+const Port=process.env.PORT || 8080
 
-
-connectDB()
+connectDB().then(()=>{
+     app.listen(Port, () => {
+       console.log(`App listening on ${Port}`);
+     });
+}).catch(error=>{
+    console.log("Database connection failed !!! ", error);
+})
 
 
 {/*
