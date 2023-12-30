@@ -21,17 +21,17 @@ const UserSchema = new mongoose.Schema(
     },
     fullName: {
       type: String,
-      required: [true, "Fullname is required"],
+      required: [true, "Fullname is required!"],
       trim: true,
       index: true,
     },
     password: {
       type: String,
-      required: [true, "Password is required"],
+      required: [true, "Password is required!"],
     },
     avatar: {
       type: String, // we will use cloudnary
-      required: [true, "Avatar is required"],
+      required: [true, "Avatar is required!"],
     },
     coverImage: {
       type: String,
@@ -51,16 +51,18 @@ const UserSchema = new mongoose.Schema(
 
 UserSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
-    this.password = bcrypt.hash(this.password, 10);
+    this.password = await bcrypt.hash(this.password, 10);
     return next();
   }
   next();
 });
 
-UserSchema.methods.isPasswordCorrect=async function(password){
-    return await bcrypt.compare(password,this.password);
-}
-
+// UserSchema.methods.isPasswordCorrect=async function(password){
+//     return await bcrypt.compare(password,this.password);
+// }
+UserSchema.methods.isPasswordCorrect = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
 UserSchema.methods.generateAccessToken = async function () {
 return jwt.sign(
   {

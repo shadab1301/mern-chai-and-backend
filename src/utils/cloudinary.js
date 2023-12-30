@@ -8,17 +8,43 @@ cloudinary.config({
 
 const uploadOnCloudinary=async(localFilePath)=> {
   try {
+    // console.log("LocalPath--------------", localFilePath);
     if (!localFilePath) return null;
-  const response = await cloudinary.v2.uploader.upload(localFilePath,{
-    resourse_type:"auto"
+  const response = await cloudinary.uploader.upload(localFilePath, {
+    resourse_type: "auto",
   });
-  console.log("cloudinary response ", response);
+
+  // console.log("cloudinary response ", response);
+    fs.unlinkSync(localFilePath);
   return response
   } catch (error) {
+    console.log("Error while cloudnary upload : ", error);
     fs.unlinkSync(localFilePath)
     return null
     
   }
 }
+const destroyFromCloudinary = async (public_id) => {
+  
+// cloudinary.v2.uploader.destroy(public_id, options).then(callback);
+  try {
+    // console.log("LocalPath--------------", localFilePath);
+    if (!id) return null;
+    const response = await cloudinary.uploader.destroy(public_id, {
+      resourse_type: "auto",
+    });
+
+    console.log("cloudinary response while destroy old assets", response);
+    return response;
+  } catch (error) {
+    console.log("Error while destroy an assest from cloudnary  : ", error);
+    return null;
+  }
+};
+
+
+
+
+export { uploadOnCloudinary, destroyFromCloudinary };
 
 
